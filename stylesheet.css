@@ -1,0 +1,499 @@
+/* Everyday Fragrance — Core Stylesheet
+   Author: ChatGPT
+   Purpose: Clean, elegant UI for a perfume & bodywash brand
+   Notes: Adjust CSS variables below for brand tuning (colors, spacing, fonts).
+*/
+
+/* ----------------------------------------
+   Variables (brand tokens)
+   ---------------------------------------- */
+:root{
+  /* Colors */
+  --bg: #fbfaf8;           /* page background */
+  --surface: #ffffff;      /* card / surface */
+  --muted: #f2efec;        /* subtle surfaces */
+  --text: #111111;         /* primary text */
+  --muted-text: #5a5a5a;   /* secondary text */
+  --accent: #A67C52;       /* warm amber (fragrance) */
+  --accent-2: #8fb4b6;     /* calming teal accent */
+  --danger: #d64545;
+  --glass: rgba(255,255,255,0.6);
+
+  /* Shadows */
+  --shadow-soft: 0 6px 20px rgba(15, 15, 15, 0.06);
+  --shadow-card: 0 10px 30px rgba(15, 15, 15, 0.08);
+
+  /* Typography */
+  --ff-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --ff-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --base-font-size: 16px;
+  --scale-ratio: 1.125; /* modular scale */
+
+  /* Spacing scale */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 20px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+
+  /* Breakpoints */
+  --bp-sm: 540px;
+  --bp-md: 900px;
+  --bp-lg: 1200px;
+}
+
+/* Dark mode tweak */
+@media (prefers-color-scheme: dark) {
+  :root{
+    --bg: #0f0f10;
+    --surface: #121213;
+    --muted: #151516;
+    --text: #f6f6f7;
+    --muted-text: #cfcfd1;
+    --glass: rgba(255,255,255,0.04);
+    --shadow-soft: 0 6px 20px rgba(0,0,0,0.6);
+    --shadow-card: 0 10px 30px rgba(0,0,0,0.6);
+  }
+}
+
+/* Accessibility, reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ----------------------------------------
+   Global reset & base
+   ---------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--ff-sans);
+  font-size: var(--base-font-size);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(180deg, var(--bg), var(--muted));
+  color: var(--text);
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  line-height: 1.45;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reusable utility */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--space-md);
+}
+
+/* Typographic scale helpers */
+.h1 {
+  font-family: var(--ff-serif);
+  font-size: calc(2.4rem * var(--scale-ratio));
+  line-height: 1.05;
+  margin: 0 0 var(--space-sm) 0;
+  letter-spacing: -0.02em;
+}
+
+.h2 {
+  font-family: var(--ff-serif);
+  font-size: 1.8rem;
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.lead {
+  font-size: 1.0625rem;
+  color: var(--muted-text);
+  margin-bottom: var(--space-md);
+}
+
+/* ----------------------------------------
+   Navigation
+   ---------------------------------------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(90deg, rgba(255,255,255,0.55), rgba(255,255,255,0.30));
+  box-shadow: var(--shadow-soft);
+}
+
+.header-inner {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--space-sm)) var(--space-md);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: var(--text);
+}
+
+.brand .logo {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--ff-serif);
+  box-shadow: var(--shadow-soft);
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--muted-text);
+  font-weight: 600;
+  padding: calc(var(--space-xs) * 1.5);
+  border-radius: var(--radius-sm);
+}
+
+.nav a:hover,
+.nav a:focus {
+  color: var(--text);
+  outline: none;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.04) inset, 0 2px 10px rgba(0,0,0,0.03);
+}
+
+/* Mobile nav: collapse into a menu (markup required) */
+.mobile-only { display: none; }
+@media (max-width: 700px){
+  .nav { display: none; }
+  .mobile-only { display: inline-flex; }
+}
+
+/* ----------------------------------------
+   Hero
+   ---------------------------------------- */
+.hero {
+  padding: calc(var(--space-lg)) 0;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+.hero-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), transparent);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(4px);
+}
+
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  color: var(--accent-2);
+  font-size: 0.75rem;
+}
+
+.hero .title {
+  font-family: var(--ff-serif);
+  font-size: 2.4rem;
+  margin: 0.35rem 0 0.75rem 0;
+}
+
+.hero .subtitle {
+  color: var(--muted-text);
+  margin-bottom: var(--space-md);
+}
+
+/* CTA */
+.cta-row { display:flex; gap: var(--space-sm); align-items:center; flex-wrap:wrap; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: transform 180ms cubic-bezier(.22,.9,.29,1), box-shadow 180ms;
+}
+
+.btn:focus { outline: 3px solid color-mix(in srgb, var(--accent) 20%, transparent); outline-offset: 2px; }
+
+/* Primary */
+.btn-primary {
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent-2) 30%));
+  color: white;
+  box-shadow: 0 8px 20px rgba(166,124,82,0.18);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(166,124,82,0.20); }
+
+/* Ghost / secondary */
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: none;
+}
+.btn-ghost:hover { background: var(--muted); }
+
+/* ----------------------------------------
+   Product grid & cards
+   ---------------------------------------- */
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+}
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .products { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 540px) {
+  .products { grid-template-columns: 1fr; }
+}
+
+/* Product card */
+.product-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: calc(var(--space-md));
+  box-shadow: var(--shadow-soft);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-sm);
+  transition: transform 230ms ease, box-shadow 230ms ease;
+  min-height: 340px;
+}
+
+.product-card:hover,
+.product-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card);
+}
+
+.product-media {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--muted), var(--glass));
+  display: grid;
+  place-items: center;
+}
+
+/* Place product image inside */
+.product-media img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Product details */
+.product-title {
+  font-family: var(--ff-serif);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.product-desc {
+  color: var(--muted-text);
+  font-size: 0.95rem;
+  margin-top: 6px;
+  flex: 1 1 auto;
+}
+
+/* Price + controls row */
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.price {
+  font-weight: 800;
+  font-size: 1.125rem;
+  color: var(--text);
+}
+
+.add-to-cart {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--accent-2);
+  color: white;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+.add-to-cart:active { transform: translateY(1px); }
+
+/* Small badge */
+.badge {
+  display:inline-block;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--text);
+}
+
+/* ----------------------------------------
+   Product detail / variant selector
+   ---------------------------------------- */
+.variants {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: var(--space-sm);
+}
+.variant-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 140ms;
+}
+.variant-swatch:focus { outline: 2px solid var(--accent); outline-offset: 2px; transform: translateY(-2px); }
+
+/* ----------------------------------------
+   Forms & inputs
+   ---------------------------------------- */
+.input, textarea, select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(15,15,15,0.06);
+  background: var(--surface);
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: box-shadow 140ms, border-color 140ms;
+}
+
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 6px 18px rgba(133, 106, 83, 0.09);
+  border-color: color-mix(in srgb, var(--accent) 30%, black);
+  outline: none;
+}
+
+/* Newsletter */
+.newsletter {
+  background: linear-gradient(180deg, rgba(255,255,255,0.4), transparent);
+  border-radius: 16px;
+  padding: var(--space-md);
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+/* ----------------------------------------
+   Footer
+   ---------------------------------------- */
+.site-footer {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg) 0;
+  border-top: 1px solid rgba(15,15,15,0.04);
+  color: var(--muted-text);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+/* ----------------------------------------
+   Micro-interactions & utilities
+   ---------------------------------------- */
+.kicker {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted-text);
+}
+
+.center {
+  text-align: center;
+}
+
+/* Visually-hidden for accessibility */
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: -1px;
+}
+
+/* Grid helpers */
+.row { display:flex; gap: var(--space-md); align-items: center; }
+.col { flex: 1; }
+
+/* Tiny responsive helpers for text */
+.small { font-size: 0.9rem; color: var(--muted-text); }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+
+/* ----------------------------------------
+   Print & minor tweaks
+   ---------------------------------------- */
+@media print {
+  .header, .btn, .nav, .product-media img { display: none !important; }
+  body { background: white; color: black; }
+}
+
+/* ----------------------------------------
+   Example theme switch utility (JS hook)
+   Add class .brand-contrast to <body> to intensify accents.
+   ---------------------------------------- */
+body.brand-contrast {
+  --accent: #b76b3c;
+  --accent-2: #5fa9a8;
+  --shadow-soft: 0 12px 26px rgba(20,20,20,0.09);
+}
+
+/* ----------------------------------------
+   End of stylesheet
+   ---------------------------------------- */
